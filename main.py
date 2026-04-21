@@ -94,7 +94,7 @@ def get_providers(request: Request, state: str = "default"):
     state_scopes = states[state]["scopes"]
 
     # get the authorization url
-    easyVerein_auth_url = f"{state_base_uri}{authorization_path}?response_type=code&code_challenge={code_challenge}&code_challenge_method=S256&client_id={state_client_id}&redirect_uri={state_redirect_uri}&scope={"%20".join(state_scopes)}&state={state}"
+    easyVerein_auth_url = f'{state_base_uri}{authorization_path}?response_type=code&code_challenge={code_challenge}&code_challenge_method=S256&client_id={state_client_id}&redirect_uri={state_redirect_uri}&scope={"%20".join(state_scopes)}&state={state}'
 
     return templates.TemplateResponse("providers.html",
                                       {"request": request, "easyVerein_auth_url": easyVerein_auth_url})
@@ -168,7 +168,7 @@ def get_response_from_stack_exchange(request: Request, code: str = "", error: st
 
         if user_response.status_code == 200:
             user_data = user_response.json()
-            user_name = user_data["emailOrUserName"]
+            user_name = user_data.get("email_or_user_name")
 
         oidc_user_info_request = requests.get(f"{state_base_uri}/oauth2/userinfo/", headers={
             "Authorization": f"Bearer {access_token}"
